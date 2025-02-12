@@ -1,24 +1,59 @@
 require('dotenv').config();
 const express = require("express");
+const session = require("express-session");
+const passport = require("passport");
+const LocalStrategy = require('passport-local').Strategy;
+const { PrismaSessionStore } = require('@quixo3/prisma-session-store');
+const { PrismaClient } = require('@prisma/client');
 const path = require("path");
 
 
 const app = express();
 const PORT = process.env.PORT || 3000;
+const logInRouter = require("./routes/login");
 
 const assetsPath = path.join(__dirname, "public");
 app.use(express.static(assetsPath));
 app.use(express.urlencoded({ extended: true }));
 
 app.set("views", path.join(__dirname, "views"));
+
 app.set("view engine", "ejs");
 // app.sesssion would go here// 
+
+app.use(session({
+  cookie: {
+    maxAge: 7 * 24 * 60 * 60 * 1000
+  },
+  secret: process.env.SESSION_SECRET,
+  resave: true,
+  saveUninitialized: true,
+  store: new PrismaSessionStore(
+    new PrismaClient(),
+    {
+      checkPeriod: 2 * 60 * 1000,
+      dbRecordIdIsSessionId: true,
+      dbRecordIdFunction: undefined,
+    }
+  )
+}
+)
+);
+
+app.use(passport.session());
+
+
+app.use("/log-in", logInRouter);
 
 app.use("/upload", (req, res) => {
   res.send("we are in the upload");
 });
 
-app.use("/", (req, res) => {
+
+app.get("/", (req, res) => {
+  if (!req.user) {
+    return res.render("sign-in");
+  }
   res.send("we are in the index");
 });
 
