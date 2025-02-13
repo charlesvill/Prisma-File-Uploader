@@ -5,6 +5,7 @@ const passport = require("passport");
 const LocalStrategy = require('passport-local').Strategy;
 const { PrismaSessionStore } = require('@quixo3/prisma-session-store');
 const { PrismaClient } = require('@prisma/client');
+const bcrypt = require("bcryptjs");
 const path = require("path");
 
 const prisma = new PrismaClient();
@@ -71,6 +72,60 @@ app.use(session({
 
 app.use(passport.session());
 
+passport.use(
+  new LocalStrategy(async (username, password, done) => {
+    try {
+      const user = await prisma.user.findFirst({
+        where: {
+          username: username,
+        },
+        select: {
+          id: true,
+          username: true,
+          password:true,
+        },
+      });
+      if(!user){
+        throw new Error("No user found!");
+      }
+
+      const match = bcrypt.compare(password, user.hash);
+
+      if(!match){
+        return done(null, false, {message: "Incorrect password!"});
+      }
+
+      return done(null, user);
+
+    } catch (err) {
+      return done(err);
+    }
+
+  }
+
+  )
+)
+passport.serializeUser((user, done) => {
+  done(null, user.id);
+});
+
+passport.deserializeUser(async (id, done) => {
+  try {
+    const user = prisma.user.findFirst({
+    where: {
+      id: id
+    },
+    select: {
+      id: true,
+      username: true,
+    }
+  });
+
+    done(null, user);
+  } catch (error) {
+    done(error)
+  }
+})
 
 app.use("/log-in", logInRouter);
 
