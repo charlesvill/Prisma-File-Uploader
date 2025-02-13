@@ -7,6 +7,35 @@ const { PrismaSessionStore } = require('@quixo3/prisma-session-store');
 const { PrismaClient } = require('@prisma/client');
 const path = require("path");
 
+const prisma = new PrismaClient();
+
+async function main() {
+
+  await prisma.user.create({
+    data: {
+      name: "charles",
+      posts: {
+        create: { content: "hello world" },
+      },
+    },
+  });
+
+  const allUsers = await prisma.user.findMany({
+    include: {
+      posts: true
+    }
+  });
+  console.dir(allUsers, { depth: null })
+}
+
+main().then(async () => {
+  await prisma.$disconnect()
+}).catch(async (e) => {
+  console.error(e);
+  await prisma.$disconnect()
+  process.exit(1)
+});
+
 
 const app = express();
 const PORT = process.env.PORT || 3000;
