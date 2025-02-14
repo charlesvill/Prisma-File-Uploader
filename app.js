@@ -7,20 +7,12 @@ const { PrismaSessionStore } = require('@quixo3/prisma-session-store');
 const { PrismaClient } = require('@prisma/client');
 const bcrypt = require("bcryptjs");
 const path = require("path");
+const logInRouter = require("./routes/login");
+const signUpRouter = require("./routes/signup.js");
 
 const prisma = new PrismaClient();
 
 async function main() {
-
-  await prisma.user.create({
-    data: {
-      name: "charles",
-      posts: {
-        create: { content: "hello world" },
-      },
-    },
-  });
-
   const allUsers = await prisma.user.findMany({
     include: {
       posts: true
@@ -40,7 +32,6 @@ main().then(async () => {
 
 const app = express();
 const PORT = process.env.PORT || 3000;
-const logInRouter = require("./routes/login");
 
 const assetsPath = path.join(__dirname, "public");
 app.use(express.static(assetsPath));
@@ -66,8 +57,7 @@ app.use(session({
       dbRecordIdFunction: undefined,
     }
   )
-}
-)
+ })
 );
 
 app.use(passport.session());
@@ -82,7 +72,7 @@ passport.use(
         select: {
           id: true,
           username: true,
-          password:true,
+          hash:true,
         },
       });
       if(!user){
@@ -111,7 +101,7 @@ passport.serializeUser((user, done) => {
 
 passport.deserializeUser(async (id, done) => {
   try {
-    const user = prisma.user.findFirst({
+    const user = await prisma.user.findFirst({
     where: {
       id: id
     },
@@ -121,14 +111,20 @@ passport.deserializeUser(async (id, done) => {
     }
   });
 
+    console.log("user being deserialized, :", user);
     done(null, user);
   } catch (error) {
     done(error)
   }
 })
 
-app.use("/log-in", logInRouter);
+app.use((req, res, next) => {
+  res.locals.user = req.user; // Ensures `user` is available in all views
+  next();
+});
 
+app.use("/log-in", logInRouter);
+app.use("/sign-up", signUpRouter);
 app.use("/upload", (req, res) => {
   res.send("we are in the upload");
 });
@@ -136,9 +132,10 @@ app.use("/upload", (req, res) => {
 
 app.get("/", (req, res) => {
   if (!req.user) {
-    return res.render("sign-in");
+    return res.redirect("/log-in");
   }
-  res.send("we are in the index");
+  console.dir(req.user);
+  res.render("index");
 });
 
 app.use((req, res, next) => {

@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="./styles.css">
+    <title>Document</title>
+</head>
+<body>
+    <header>
+        <%- include('./partials/header')%>
+    </header>
+    <main>
+
+        <form action="/sign-up" method="POST" class="signup form">
+            <div class="wrapper">
+                <label for="firstname">First Name</label>
+                <input type="text" name="firstname">
+            </div>
+            <div class="wrapper">
+                <label for="lastname">Last Name</label>
+                <input type="text" name="lastname">
+            </div>
+            <div class="wrapper">
+                <label for="username">Username</label>
+                <input type="text" name="username">
+            </div>
+            <div class="wrapper">
+                <label for="password">Password</label>
+                <input type="password" name="password">
+            </div>
+            <div class="wrapper">
+                <label for="confirmpass">Confirm Password</label>
+                <input type="password" name="confirmpass">
+            </div>
+
+            <button type="submit">Sign Up</button>
+        </form>
+    </main>
+    <footer>
+        <%- include('./partials/footer')%>
+    </header>
+    </footer>
+
+</body>
+</html

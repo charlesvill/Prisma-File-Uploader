@@ -1,0 +1,13 @@
+<div class="headerCont">
+    <a href="/"><h1>QuickQuips</h1></a>
+    <div class="greetingCont">
+    <% if(locals.user) {%>
+        <h3><%= locals.user.username%></h3>
+                <form action="/log-out" method="post">
+                    <button type="submit" class="logOutBtn">log out</button>
+                </form>
+        <% } else { %>
+            <h5>Please <a href="/log-in">sign in</a> to continue</h5>
+        <% } %>
+    </div>
+</div>
