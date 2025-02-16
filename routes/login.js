@@ -16,5 +16,4 @@ logInRouter.post("/", passport.authenticate("local", {
 ));
 
 
-
 module.exports = logInRouter;

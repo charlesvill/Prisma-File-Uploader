@@ -2,33 +2,14 @@ require('dotenv').config();
 const express = require("express");
 const session = require("express-session");
 const passport = require("passport");
-const LocalStrategy = require('passport-local').Strategy;
+const prisma = require("./prisma/prisma.js");
 const { PrismaSessionStore } = require('@quixo3/prisma-session-store');
-const { PrismaClient } = require('@prisma/client');
-const bcrypt = require("bcryptjs");
+const { PrismaClient } = require("@prisma/client");
+const passportConfig = require("./authentication/passport-config.js");
+
 const path = require("path");
 const logInRouter = require("./routes/login");
 const signUpRouter = require("./routes/signup.js");
-
-const prisma = new PrismaClient();
-
-async function main() {
-  const allUsers = await prisma.user.findMany({
-    include: {
-      posts: true
-    }
-  });
-  console.dir(allUsers, { depth: null })
-}
-
-main().then(async () => {
-  await prisma.$disconnect()
-}).catch(async (e) => {
-  console.error(e);
-  await prisma.$disconnect()
-  process.exit(1)
-});
-
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -41,6 +22,8 @@ app.set("views", path.join(__dirname, "views"));
 
 app.set("view engine", "ejs");
 // app.sesssion would go here// 
+
+passportConfig(passport, prisma);
 
 app.use(session({
   cookie: {
@@ -62,62 +45,6 @@ app.use(session({
 
 app.use(passport.session());
 
-passport.use(
-  new LocalStrategy(async (username, password, done) => {
-    try {
-      const user = await prisma.user.findFirst({
-        where: {
-          username: username,
-        },
-        select: {
-          id: true,
-          username: true,
-          hash:true,
-        },
-      });
-      if(!user){
-        throw new Error("No user found!");
-      }
-
-      const match = bcrypt.compare(password, user.hash);
-
-      if(!match){
-        return done(null, false, {message: "Incorrect password!"});
-      }
-
-      return done(null, user);
-
-    } catch (err) {
-      return done(err);
-    }
-
-  }
-
-  )
-)
-passport.serializeUser((user, done) => {
-  done(null, user.id);
-});
-
-passport.deserializeUser(async (id, done) => {
-  try {
-    const user = await prisma.user.findFirst({
-    where: {
-      id: id
-    },
-    select: {
-      id: true,
-      username: true,
-    }
-  });
-
-    console.log("user being deserialized, :", user);
-    done(null, user);
-  } catch (error) {
-    done(error)
-  }
-})
-
 app.use((req, res, next) => {
   res.locals.user = req.user; // Ensures `user` is available in all views
   next();
@@ -128,7 +55,6 @@ app.use("/sign-up", signUpRouter);
 app.use("/upload", (req, res) => {
   res.send("we are in the upload");
 });
-
 
 app.get("/", (req, res) => {
   if (!req.user) {
