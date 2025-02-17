@@ -10,6 +10,7 @@ const passportConfig = require("./authentication/passport-config.js");
 const path = require("path");
 const logInRouter = require("./routes/login");
 const signUpRouter = require("./routes/signup.js");
+const uploadRouter = require("./routes/upload.js");
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -21,7 +22,6 @@ app.use(express.urlencoded({ extended: true }));
 app.set("views", path.join(__dirname, "views"));
 
 app.set("view engine", "ejs");
-// app.sesssion would go here// 
 
 passportConfig(passport, prisma);
 
@@ -52,9 +52,7 @@ app.use((req, res, next) => {
 
 app.use("/log-in", logInRouter);
 app.use("/sign-up", signUpRouter);
-app.use("/upload", (req, res) => {
-  res.send("we are in the upload");
-});
+app.use("/upload", uploadRouter);
 
 app.get("/", (req, res) => {
   if (!req.user) {
