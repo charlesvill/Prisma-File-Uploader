@@ -8,8 +8,9 @@ const storage = multer.diskStorage({
     cb(null, path.join(__dirname,"..","uploads"));
   },
   filename: function (req, file, cb) {
+    console.log("orginal file name: ", file.originalname);
     const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
-    cb(null, file.fieldname + '-' + uniqueSuffix + path.extname(file.originalname));
+    cb(null, path.basename(file.originalname, path.extname(file.originalname))+ '-' + uniqueSuffix + path.extname(file.originalname));
   }
 })
 
@@ -28,6 +29,7 @@ uploadRouter.post("/", upload.single("file"), (req, res) => {
     return res.status(400).json({ message: "no file found!" });
   }
 
-})
+  res.status(200).json({ message: "file successfully uploaded", filename: req.file.filename});
+});
 
 module.exports = uploadRouter;
