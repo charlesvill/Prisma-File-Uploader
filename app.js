@@ -11,6 +11,7 @@ const path = require("path");
 const logInRouter = require("./routes/login");
 const signUpRouter = require("./routes/signup.js");
 const uploadRouter = require("./routes/upload.js");
+const indexRouter = require("./routes/index.js");
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -50,17 +51,21 @@ app.use((req, res, next) => {
   next();
 });
 
+//this line below is test code
+const uploadDir = path.join(__dirname, "uploads");
+
 app.use("/log-in", logInRouter);
 app.use("/sign-up", signUpRouter);
 app.use("/upload", uploadRouter);
+app.use("/uploads", express.static(uploadDir));
 
-app.get("/", (req, res) => {
-  if (!req.user) {
-    return res.redirect("/log-in");
-  }
-  console.dir(req.user);
-  res.render("index");
-});
+
+// route for a folder you can create where you can read create update and deleete folders
+// folders should read the contents of the files and the folder should store the id of the file
+// should be able to read information about the file such as the file size, date created etc
+// should be able to add/delete files from these folders as well. 
+
+app.get();
 
 app.use((req, res, next) => {
   console.log("no route was found");

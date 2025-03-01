@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>File uploader</title>
+</head>
+<body>
+    <header>
+        <%- include('./partials/header') %>
+    </header>
+    <main>
+        hello from the index. if you are here you should be signed in
+        <form action="/form/create" method="post">
+            <input type="hidden" name="userid" value="<%= user.id %>">
+            <input type="text" name="name" id="name">
+            <button type="submit">add</button>
+        </form>
+    </main>
+    <footer>
+
+    </footer>
+
+</body>
+</html>
