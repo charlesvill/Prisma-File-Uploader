@@ -10,8 +10,8 @@
         <%- include('./partials/header') %>
     </header>
     <main>
-        hello from the index. if you are here you should be signed in
-        <form action="/form/create" method="post">
+        Here you can create a new folder
+        <form action="/folder/create" method="post">
             <input type="hidden" name="userid" value="<%= user.id %>">
             <input type="text" name="name" id="name">
             <button type="submit">add</button>
