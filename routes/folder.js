@@ -30,24 +30,22 @@ folderRouter.post("/create", async (req, res) => {
       },
     },
     include: {
-      owner: true,
-    }
-  });
-
-
-  const query = await prisma.user.findFirst({
-    where: {
-      id: Number(userid),
-    },
-    include : {
-      folders: true,
+      owner: {
+        include: {
+          folders: true,
+        },
+      },
     },
   });
+  
+  console.log("response", response);
+  // const clearDbase = await prisma.folder.deleteMany({
+  //   where: {
+  //     ownerId : Number(userid),
+  //   },
+  // });
 
-  console.log("query results including posts", query);
-
-  return res.json(response);
-  // async function that creates folder with name 
+  return res.redirect("/");
 });
 
 folderRouter.get("/:id", (req, res) => {

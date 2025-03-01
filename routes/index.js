@@ -1,13 +1,19 @@
 const { Router } = require("express");
+const { readAllFoldersByUser } = require("../controllers/read.js");
 const indexRouter = Router();
 
-indexRouter.get("/", (req, res) => {
+
+indexRouter.get("/", async (req, res) => {
   if (!req.user) {
     return res.redirect("/log-in");
   }
-  console.dir(req.user);
   // use the controller to read all data for user
-  res.render("index");
+  const { folders } = await readAllFoldersByUser(req.user);
+  
+  console.log("folders", folders);
+  res.render("index", {
+    folders: folders,
+  });
 });
 
 module.exports = indexRouter;

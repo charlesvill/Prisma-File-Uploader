@@ -1,0 +1,14 @@
+<div>
+    <ul>
+     <% folders.map((folder) => { %>
+
+        <li>
+            <div><%=folder.folder_name %></div>
+            <div><%= folder.last_modified %></div>
+        </li>
+
+     <%})%>
+
+     ideally loose files would be pulled somewhere here.
+    </ul>
+</div>
