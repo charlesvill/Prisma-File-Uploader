@@ -22,7 +22,7 @@ folderRouter.post("/create", async (req, res) => {
   const { name, userid } = req.body;
 
   const response = await createFolderByUser(userid);
-  
+
   console.log("response", response);
   // const clearDbase = await prisma.folder.deleteMany({
   //   where: {
@@ -35,7 +35,7 @@ folderRouter.post("/create", async (req, res) => {
 
 folderRouter.get("/:id", async (req, res) => {
   // this is where searching by folder would be handled
-  if(!req.user){
+  if (!req.user) {
     return res.redirect("/log-in");
   }
 
@@ -44,17 +44,17 @@ folderRouter.get("/:id", async (req, res) => {
 
   console.log("id of the user: ", userId);
 
-  if(typeof id === NaN ){
+  if (typeof id === NaN) {
     return res.status(404).render("error", {
       errorMessage: "404: Not found!"
     });
   }
 
-  const  folder  = await readFolderById(userId, folderId);
+  const folder = await readFolderById(userId, folderId);
 
 
-  if(folder[0] === undefined){
-    return res.status(403).render("error",{
+  if (folder[0] === undefined) {
+    return res.status(403).render("error", {
       errorMessage: "403: Forbidden"
     });
 
@@ -63,12 +63,34 @@ folderRouter.get("/:id", async (req, res) => {
   console.log("folder found was: ", folder[0]);
 
   // res.render the folder ejs with the folder as the data
-  
-
-
-
-  res.send("we are in the folder id route");
+  res.render("folder", {
+    folder: folder[0]
+  });
 });
+
+folderRouter.post("/:id", async (req, res) => {
+  const { folderName } = req.body;
+
+  const folderId = req.params.id;
+  const userId = req.user.id;
+
+  const update = await prisma.folder.update({
+    where: {
+      id: Number(folderId),
+    },
+    data: {
+      folder_name: folderName,
+    },
+  });
+
+  return res.redirect(`/folder/${folderId}`);
+});
+
+folderRouter.get("/add/:id", async (req, res) => {
+  res.send("there was a request to upload a file inside of a folder");
+  // destructure the folder id, user id and file metadata from form
+});
+
 
 
 module.exports = folderRouter;
