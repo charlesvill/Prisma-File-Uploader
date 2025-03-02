@@ -2,6 +2,7 @@ const { Router } = require("express");
 const { createFolderByUser } = require("../controllers/create.js");
 const { readFolderById } = require("../controllers/read.js");
 const { updateFolderById } = require("../controllers/update.js");
+const { deleteFolderById } = require("../controllers/delete.js");
 const folderRouter = Router();
 
 const prisma = require("../prisma/prisma.js");
@@ -22,7 +23,7 @@ folderRouter.get("/create", (req, res) => {
 folderRouter.post("/create", async (req, res) => {
   const { name, userid } = req.body;
 
-  const response = await createFolderByUser(userid);
+  const response = await createFolderByUser(userid, name);
 
   console.log("response", response);
   // const clearDbase = await prisma.folder.deleteMany({
@@ -73,7 +74,6 @@ folderRouter.post("/:id", async (req, res) => {
   const { folderName } = req.body;
 
   const folderId = req.params.id;
-  const userId = req.user.id;
 
   const response = await updateFolderById(folderId, folderName);
 
@@ -84,6 +84,15 @@ folderRouter.get("/add/:id", async (req, res) => {
   res.send("there was a request to upload a file inside of a folder");
   // destructure the folder id, user id and file metadata from form
 });
+
+folderRouter.post("/delete/:id", async (req, res) => {
+  const folderId = req.params.id;
+
+  const deleteFolder = await deleteFolderById(folderId);
+
+  return res.redirect("/");
+});
+
 
 
 

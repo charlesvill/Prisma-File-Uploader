@@ -19,6 +19,15 @@
             <input type="file" name="file" id="file">
             <button type="submit">Add File</button>
         </form>
+
+        <div>
+            <h4>Danger!</h4>
+            <form action="/folder/delete/<%= folder.id %>" method="post">
+                <label for="deleteButton">Delete folder and all contents?</label>
+                <button>Delete</button>
+            </form>
+
+        </div>
     </main>
     <footer>
 

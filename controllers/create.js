@@ -1,9 +1,9 @@
 const prisma = require("../prisma/prisma.js");
 
-async function createFolderbyUser(userid) {
+async function createFolderByUser(userid, folderName) {
   const response = await prisma.folder.create({
     data: {
-      folder_name: name,
+      folder_name: folderName,
       owner: {
         connect: {
           id: Number(userid)
@@ -23,6 +23,6 @@ async function createFolderbyUser(userid) {
 }
 
 module.exports = {
-  createFolderbyUser,
+  createFolderByUser,
 };
 
