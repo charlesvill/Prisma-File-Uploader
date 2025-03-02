@@ -1,10 +1,10 @@
 // controller for reading the files that are present for a certain user
 const prisma = require("../prisma/prisma.js");
 
-async function readAllFoldersByUser(user){
+async function readAllFoldersByUser(user) {
   const userId = user.id;
   console.log(userId);
-  const folders = await prisma.user.findUnique({
+  const { folders } = await prisma.user.findUnique({
     where: {
       id: Number(userId),
     },
@@ -18,7 +18,25 @@ async function readAllFoldersByUser(user){
   return folders;
 }
 
+async function readFolderById(userId, folderId) {
+  const { folders } = await prisma.user.findUnique({
+    where: {
+      id: Number(userId),
+    },
+    include: {
+      folders: {
+        where: {
+          id: Number(folderId),
+        },
+      },
+    },
+  });
+
+  return folders;
+}
+
 
 module.exports = {
   readAllFoldersByUser,
+  readFolderById,
 };

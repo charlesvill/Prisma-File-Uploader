@@ -1,13 +1,15 @@
 <div>
     <ul>
-     <% folders.map((folder) => { %>
-
+     <%if(folders){ %>
+        <%folders.map((folder) => { %>
         <li>
-            <div><%=folder.folder_name %></div>
-            <div><%= folder.last_modified %></div>
+            <a href="folder/<%= folder.id %>">
+                <div><%=folder.folder_name %></div>
+                <div><%= folder.last_modified %></div>
+            </a>
         </li>
-
-     <%})%>
+        <%})%>
+       <%} %>
 
      ideally loose files would be pulled somewhere here.
     </ul>

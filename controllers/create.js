@@ -1,21 +1,28 @@
-// controller that will create a folder or a file
-//
-//
 const prisma = require("../prisma/prisma.js");
 
-function createFoldersbyUser(req, res, user_id){
-  // get file information from req.body
-  // id
-  // filename
-  // fileextension
-  // filesize
-  // owner
-  // folder
+async function createFolderbyUser(userid) {
+  const response = await prisma.folder.create({
+    data: {
+      folder_name: name,
+      owner: {
+        connect: {
+          id: Number(userid)
+        },
+      },
+    },
+    include: {
+      owner: {
+        include: {
+          folders: true,
+        },
+      },
+    },
+  });
 
-
+  return response;
 }
 
 module.exports = {
-  createFoldersbyUser,
+  createFolderbyUser,
 };
 
