@@ -1,6 +1,7 @@
 const { Router } = require("express");
 const { createFolderByUser } = require("../controllers/create.js");
 const { readFolderById } = require("../controllers/read.js");
+const { updateFolderById } = require("../controllers/update.js");
 const folderRouter = Router();
 
 const prisma = require("../prisma/prisma.js");
@@ -74,14 +75,7 @@ folderRouter.post("/:id", async (req, res) => {
   const folderId = req.params.id;
   const userId = req.user.id;
 
-  const update = await prisma.folder.update({
-    where: {
-      id: Number(folderId),
-    },
-    data: {
-      folder_name: folderName,
-    },
-  });
+  const response = await updateFolderById(folderId, folderName);
 
   return res.redirect(`/folder/${folderId}`);
 });
