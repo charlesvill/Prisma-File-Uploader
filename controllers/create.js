@@ -22,7 +22,49 @@ async function createFolderByUser(userid, folderName) {
   return response;
 }
 
+async function createFileByUser(
+  fileName, 
+  fileExt, 
+  fileSize,
+  fileUrl,
+  userId,
+  folderId
+){
+  const response = await prisma.file.create({
+    data: {
+      file_name: fileName,
+      file_extension: fileExt,
+      file_size: Number(fileSize),
+      file_url: fileUrl,
+      owner: {
+        connect: {
+          id: Number(userId),
+        },
+      },
+      folder: {
+        connect: {
+          id: Number(folderId),
+        },
+      },
+    },
+    include: {
+      folder: {
+        include: {
+          files: true,
+        },
+      },
+    },
+  }).catch((error) => {
+      throw new Error(error);
+    });
+
+  console.log("file creation response", response);
+  console.log("folder contents: ", response.folder.files);
+  return response;
+}
+
 module.exports = {
   createFolderByUser,
+  createFileByUser,
 };
 

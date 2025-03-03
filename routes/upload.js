@@ -3,6 +3,7 @@ const uploadRouter = Router();
 const multer = require('multer');
 const path = require("path");
 const uploadFromStream  = require("../cloud/cloudinary.js");
+const { createFileByUser } = require("../controllers/create.js");
 
 
 //under uploading via memory buffer instead of storage config above, all you will need is const storage = multer.memoryStorage(): t
@@ -10,23 +11,45 @@ const uploadFromStream  = require("../cloud/cloudinary.js");
 const storage = multer.memoryStorage();
 const upload = multer({ storage: storage });
 
-uploadRouter.get("/", (req, res) => {
+uploadRouter.get("/:folderId", (req, res) => {
   if(!req.user){
     return res.redirect("/log-in");
   }
 
-  res.render("upload");
+  const folderId = req.params.folderId;
+
+  res.render("upload", {
+    folderId: folderId
+  });
 });
 
-uploadRouter.post("/", upload.single("file"), async (req, res) => {
+uploadRouter.post("/:folderId", upload.single("file"), async (req, res) => {
   if(!req.file){
     return res.status(400).json({ message: "no file found!" });
   }
-  console.log("file size", req.file.size);
+  const folderId = req.params.folderId;
+  const fileExt = path.extname(req.file.originalname)
+
   const uploadResult = await uploadFromStream(req.file.buffer);
+   
+  console.log("req file object", req.file);
   console.log("upload result: ", uploadResult);
 
-  res.status(200).json({ message: "file successfully uploaded", filedata: req.file.filename});
+  const dbResponse = await createFileByUser(
+    req.file.originalname,
+    fileExt,
+    req.file.size,
+    uploadResult.url,
+    req.user.id,
+    folderId
+  );
+
+  // prisma here needs to do something
+  res.status(200).json({ 
+    message: "file successfully uploaded", 
+    filedata: req.file.filename, 
+    uploadResult
+  });
 });
 
 module.exports = uploadRouter;

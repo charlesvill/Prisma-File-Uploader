@@ -10,7 +10,7 @@
         <%- include('./partials/header') %>
     </header>
     <main>
-        <form action="/upload" method="post" enctype="multipart/form-data">
+        <form action="/upload/<%= folderId %>" method="post" enctype="multipart/form-data">
             <div>Upload a file</div>
             <label for="file">Attach file</label>
             <input type="file" name="file" id="file">

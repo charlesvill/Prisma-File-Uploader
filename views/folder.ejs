@@ -15,13 +15,14 @@
             <button type="submit">update</button>
         </form>
         // function here that will generate all files
-        <form action="/folder/add/<%= folder.id %>" method="post" enctype="multipart/form-data">
-            <input type="file" name="file" id="file">
-            <button type="submit">Add File</button>
-        </form>
 
         <div>
-            <h4>Danger!</h4>
+            <h4>Add Files</h4>
+            <a href="/upload/<%= folder.id %>">+</a>
+        </div>
+
+        <div>
+            <h5>Danger!</h5>
             <form action="/folder/delete/<%= folder.id %>" method="post">
                 <label for="deleteButton">Delete folder and all contents?</label>
                 <button>Delete</button>
