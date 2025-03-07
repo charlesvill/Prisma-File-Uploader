@@ -71,7 +71,7 @@ folderRouter.get("/:id", async (req, res) => {
 });
 
 folderRouter.get("/:id/files", async (req, res) => {
-  if(!req.user){
+  if (!req.user) {
     res.redirect("/log-in");
   }
 
@@ -98,7 +98,11 @@ folderRouter.get("/add/:id", async (req, res) => {
 folderRouter.post("/delete/:id", async (req, res) => {
   const folderId = req.params.id;
 
-  const deleteFolder = await deleteFolderById(folderId);
+  try {
+    const deleteFolder = await deleteFolderById(folderId);
+  } catch (error) {
+    console.error(error);
+  }
 
   return res.redirect("/");
 });
