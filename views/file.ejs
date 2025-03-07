@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>File uploader</title>
+</head>
+<body>
+    <header>
+        <%- include('./partials/header') %>
+    </header>
+    <main>
+        <div class="fileContents">
+            <ul>
+                <li>file name: <%= file.file_name%></li>
+                <li>file extension:<%= file.file_name%></li>
+                <li>file size: <%= file.file_name%></li>
+                <li>file created: <%= file.file_name%></li>
+                <li>file extension: <%= file.file_extension %></li>
+                <li>Owner: </li>
+            </ul>
+            <div class="filePreview">
+                <% if(file.previewableExt.icludes(file.file_extension)){ %>
+                    <img src="<%= file.file_url%>" alt="file preview">
+                <% } else { %>
+                    <img src="/public/assets/draft_24dp_000000_FILL0_wght400_GRAD0_opsz24.svg" alt="stock file img">
+                <% } %>
+            </div>
+        </div>
+    </main>
+    <footer>
+
+    </footer>
+
+</body>
+</html>

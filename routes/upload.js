@@ -28,7 +28,7 @@ uploadRouter.post("/:folderId", upload.single("file"), async (req, res) => {
     return res.status(400).json({ message: "no file found!" });
   }
   const folderId = req.params.folderId;
-  const fileExt = path.extname(req.file.originalname)
+  const fileExt = path.extname(req.file.originalname).slice(1);
 
   const uploadResult = await uploadFromStream(req.file.buffer);
    
@@ -44,12 +44,9 @@ uploadRouter.post("/:folderId", upload.single("file"), async (req, res) => {
     folderId
   );
 
-  // prisma here needs to do something
-  res.status(200).json({ 
-    message: "file successfully uploaded", 
-    filedata: req.file.filename, 
-    uploadResult
-  });
+  console.log("file upload response: ", dbResponse);
+
+  res.status(200).redirect(`/folder/${folderId}`);
 });
 
 module.exports = uploadRouter;

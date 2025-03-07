@@ -70,6 +70,16 @@ folderRouter.get("/:id", async (req, res) => {
   });
 });
 
+folderRouter.get("/:id/files", async (req, res) => {
+  if(!req.user){
+    res.redirect("/log-in");
+  }
+
+  const folderId = req.params.id;
+
+
+});
+
 folderRouter.post("/:id", async (req, res) => {
   const { folderName } = req.body;
 

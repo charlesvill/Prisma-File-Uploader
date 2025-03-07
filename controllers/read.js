@@ -28,15 +28,39 @@ async function readFolderById(userId, folderId) {
         where: {
           id: Number(folderId),
         },
+        include: {
+          files: {
+            where : {
+              ownerId: Number(userId),
+            },
+          },
+        },
       },
     },
   });
 
+  console.log("folder contents", folders);
   return folders;
 }
+
+async function readFileById(fileId, userId){
+  const response = await prisma.file.findUnique({
+    where: {
+      id: Number(fileId),
+      ownerId: Number(userId),
+    },
+    include: {
+      owner: true,
+    },
+  });
+
+  return response;
+}
+
 
 
 module.exports = {
   readAllFoldersByUser,
   readFolderById,
+  readFileById, 
 };
