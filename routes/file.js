@@ -1,20 +1,20 @@
 const { Router } = require("express");
 const fileRouter = Router();
 const { readFileById } = require("../controllers/read");
+
 fileRouter.get("/:id", async (req, res) => {
   if (!req.user) {
     res.redirect("/log-in");
   }
 
   const fileId = req.params.id;
-
-  try {
-    const response = await readFileById(fileId, req.user.id);
-    console.log("File read response: ", response);
-  } catch (error) { res.status(500).render("error", {
+  const response = await readFileById(fileId, req.user.id).catch((error) => {
+    res.status(500).render("error", {
       errorMessage: error,
     });
-  }
+  });
+
+  console.log("File read response: ", response);
 
   const previewableExt = [
     "img",
@@ -29,4 +29,7 @@ fileRouter.get("/:id", async (req, res) => {
   res.render("file", {
     file: file,
   });
+
 });
+
+module.exports = fileRouter;

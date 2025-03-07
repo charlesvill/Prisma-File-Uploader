@@ -35,6 +35,7 @@ model File {
   file_extension String
   file_size      Int?
   file_url       String?
+  public_id      String?
   date_created   DateTime @default(now())
   owner          User     @relation(fields: [ownerId], references: [id])
   ownerId        Int

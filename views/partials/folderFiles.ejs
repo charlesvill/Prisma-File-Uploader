@@ -3,7 +3,7 @@
      <%if(folder){ %>
         <%folder.files.map((file) => { %>
         <li>
-            <a href="/folder/<%= file.id%>">
+            <a href="/file/<%= file.id%>">
                 <div><%=file.file_name%></div>
                 <div><%= file.file_extension%></div>
                 <div><%= file.file_size %></div>

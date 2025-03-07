@@ -15,7 +15,9 @@ async function deleteFolderById(folderId) {
       },
     });
 
-    const transaction = await prisma.$transaction([deleteFiles, deleteFolder]);
+    const transaction = await prisma.$transaction([deleteFiles, deleteFolder]).then(
+      response => console.log("delete successful: ", response)
+    );
 
   } catch (error) {
 

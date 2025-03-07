@@ -13,17 +13,16 @@
         <div class="fileContents">
             <ul>
                 <li>file name: <%= file.file_name%></li>
-                <li>file extension:<%= file.file_name%></li>
-                <li>file size: <%= file.file_name%></li>
-                <li>file created: <%= file.file_name%></li>
-                <li>file extension: <%= file.file_extension %></li>
-                <li>Owner: </li>
+                <li>file extension:<%= file.file_extension%></li>
+                <li>file size: <%= file.file_size%></li>
+                <li>file created: <%= file.date_created%></li>
+                <li>Owner: <%= file.owner.name %> </li>
             </ul>
             <div class="filePreview">
-                <% if(file.previewableExt.icludes(file.file_extension)){ %>
+                <% if(file.previewableExt.includes(file.file_extension)){ %>
                     <img src="<%= file.file_url%>" alt="file preview">
                 <% } else { %>
-                    <img src="/public/assets/draft_24dp_000000_FILL0_wght400_GRAD0_opsz24.svg" alt="stock file img">
+                    <img src="/assets/draft_24dp_000000_FILL0_wght400_GRAD0_opsz24.svg" alt="stock file img">
                 <% } %>
             </div>
         </div>

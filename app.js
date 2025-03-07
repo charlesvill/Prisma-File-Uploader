@@ -12,6 +12,7 @@ const logInRouter = require("./routes/login");
 const signUpRouter = require("./routes/signup.js");
 const uploadRouter = require("./routes/upload.js");
 const folderRouter = require("./routes/folder.js");
+const fileRouter = require("./routes/file.js");
 const indexRouter = require("./routes/index.js");
 
 const app = express();
@@ -60,6 +61,7 @@ app.use("/sign-up", signUpRouter);
 app.use("/upload", uploadRouter);
 app.use("/uploads", express.static(uploadDir));
 app.use("/folder", folderRouter);
+app.use("/file", fileRouter);
 
 
 // route for a folder you can create where you can read create update and deleete folders

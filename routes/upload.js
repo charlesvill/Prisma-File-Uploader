@@ -2,7 +2,7 @@ const { Router } = require("express");
 const uploadRouter = Router();
 const multer = require('multer');
 const path = require("path");
-const uploadFromStream  = require("../cloud/cloudinary.js");
+const { uploadFromStream } = require("../cloud/cloudinary.js");
 const { createFileByUser } = require("../controllers/create.js");
 
 
@@ -40,6 +40,7 @@ uploadRouter.post("/:folderId", upload.single("file"), async (req, res) => {
     fileExt,
     req.file.size,
     uploadResult.url,
+    uploadResult.public_id,
     req.user.id,
     folderId
   );

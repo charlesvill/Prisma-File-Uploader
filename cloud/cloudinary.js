@@ -1,14 +1,13 @@
 const { v2 } = require("cloudinary");
 const cloudinary = v2;
 
-async function uploadFromStream(buffer) {
-  cloudinary.config({
-    cloud_name: process.env.CLOUD_NAME,
-    api_key: process.env.API_KEY,
-    api_secret: process.env.API_SECRET
-  });
+cloudinary.config({
+  cloud_name: process.env.CLOUD_NAME,
+  api_key: process.env.API_KEY,
+  api_secret: process.env.API_SECRET
+});
 
-  console.log("greetings from the buffer stream file uploader!")
+async function uploadFromStream(buffer) {
   const uploadResult = await new Promise((resolve, reject) => {
 
     cloudinary.uploader.upload_stream(
@@ -28,6 +27,14 @@ async function uploadFromStream(buffer) {
   return uploadResult;
 }
 
+async function deleteManyFromRemote(files) {
+  const response = await cloudinary.api.delete_resources(files).then(result=>console.log(result));
+  return response;
+}
 
-module.exports = uploadFromStream;
+
+module.exports = {
+  uploadFromStream,
+  deleteManyFromRemote,
+};
 

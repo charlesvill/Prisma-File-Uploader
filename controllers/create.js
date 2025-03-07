@@ -27,6 +27,7 @@ async function createFileByUser(
   fileExt, 
   fileSize,
   fileUrl,
+  publicId,
   userId,
   folderId
 ){
@@ -36,6 +37,7 @@ async function createFileByUser(
       file_extension: fileExt,
       file_size: Number(fileSize),
       file_url: fileUrl,
+      public_id: publicId,
       owner: {
         connect: {
           id: Number(userId),
