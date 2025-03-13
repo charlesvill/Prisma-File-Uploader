@@ -22,8 +22,8 @@ function init(passport, prisma) {
       }
 
       const match = await bcrypt.compare(password, user.hash);
-      console.dir("user pulled: ", user);
-      console.log("was there a match? ", match);
+      // console.dir("user pulled: ", user);
+      // console.log("was there a match? ", match);
 
       if (!match) {
         return done(null, false, { message: "Incorrect password!" });
@@ -44,10 +44,11 @@ function init(passport, prisma) {
   });
 
   passport.deserializeUser(async (id, done) => {
+    // console.log("id: ", id);
     try {
       const user = await prisma.user.findFirst({
         where: {
-          id: id
+          id: Number(id.id),
         },
         select: {
           id: true,
@@ -55,7 +56,7 @@ function init(passport, prisma) {
         }
       });
 
-      console.log("user being deserialized, :", user);
+      // console.log("user being deserialized, :", user);
       done(null, user);
     } catch (error) {
       done(error)

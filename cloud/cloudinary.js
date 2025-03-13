@@ -32,7 +32,6 @@ async function deleteManyFromRemote(files) {
   return response;
 }
 
-
 module.exports = {
   uploadFromStream,
   deleteManyFromRemote,

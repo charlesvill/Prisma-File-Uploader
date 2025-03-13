@@ -5,8 +5,6 @@ const { updateFolderById } = require("../controllers/update.js");
 const { deleteFolderById } = require("../controllers/delete.js");
 const folderRouter = Router();
 
-const prisma = require("../prisma/prisma.js");
-
 
 folderRouter.get("/create", (req, res) => {
   if (!req.user) {
@@ -26,11 +24,6 @@ folderRouter.post("/create", async (req, res) => {
   const response = await createFolderByUser(userid, name);
 
   console.log("response", response);
-  // const clearDbase = await prisma.folder.deleteMany({
-  //   where: {
-  //     ownerId : Number(userid),
-  //   },
-  // });
 
   return res.redirect("/");
 });

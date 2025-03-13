@@ -37,9 +37,9 @@ model File {
   file_url       String?
   public_id      String?
   date_created   DateTime @default(now())
-  owner          User     @relation(fields: [ownerId], references: [id])
+  owner          User     @relation(fields: [ownerId], references: [id], onDelete: Cascade)
   ownerId        Int
-  folder         Folder   @relation(fields: [folderId], references: [id])
+  folder         Folder   @relation(fields: [folderId], references: [id], onDelete: Cascade)
   folderId       Int
 }
 
@@ -47,9 +47,19 @@ model Folder {
   id            Int      @id @default(autoincrement())
   folder_name   String
   last_modified DateTime @default(now())
-  owner         User     @relation(fields: [ownerId], references: [id])
+  owner         User     @relation(fields: [ownerId], references: [id], onDelete: Cascade)
   ownerId       Int
   files         File[]
+  share         Share?
 }
 
-// how is this preventing two of the exact same named files to exist in the same folder? 
+
+model Share {
+  id             Int      @id @default(autoincrement())
+  folder         Folder   @relation(fields: [folderId], references: [id], onDelete: Cascade)
+  folderId       Int      @unique
+  share_URL      String
+  date_created DateTime @default(now())
+  lifespan  Int
+}
+// share lifespan represented in number of days
