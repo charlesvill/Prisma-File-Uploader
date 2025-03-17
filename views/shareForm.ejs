@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>File uploader</title>
+</head>
+<body>
+    <header>
+        <%- include('./partials/header') %>
+    </header>
+    <main>
+        <form action="/folder/share/<%= id %>" method="post">
+            <label for="lifeSpan">Acces duration in days</label>
+            <input type="number" name="lifeSpan" id="lifeSpan">
+            <button type="submit">generate link</button>
+        </form>
+    </main>
+    <footer>
+
+    </footer>
+
+</body>
+</html>

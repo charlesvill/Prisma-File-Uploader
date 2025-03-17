@@ -112,14 +112,21 @@ folderRouter.get("/share/:id", async (req, res) => {
   try {
     const response = await readFolderById(userId, folderId);
     
+    if(response.length === 0 || response === undefined){
+      const msg = "Access denied!";
+      res.status(500).render("error", {
+        errorMessage: msg,
+      });
+      throw new Error(msg);
+    }
+
   } catch (error) {
     console.error("Error with matching folder id with user!", error);
-
   }
 
-
-
-
+  res.render("shareForm", {
+    id: folderId,
+  });
   // serve form for sharing
   //
 });
