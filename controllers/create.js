@@ -60,13 +60,32 @@ async function createFileByUser(
       throw new Error(error);
     });
 
-  console.log("file creation response", response);
-  console.log("folder contents: ", response.folder.files);
+  // console.log("file creation response", response);
+  // console.log("folder contents: ", response.folder.files);
+  return response;
+}
+
+async function createShareLink(folderId, shareUrl, lifeSpan) {
+  const response = await prisma.share.create({
+    data: {
+      folder: {
+        connect: {
+          id: parseInt(folderId),
+        },
+      },
+      share_URL: shareUrl,
+      lifespan: parseInt(lifeSpan),
+    },
+  });
+
+  console.log("share link response: ", response);
+
   return response;
 }
 
 module.exports = {
   createFolderByUser,
   createFileByUser,
+  createShareLink,
 };
 

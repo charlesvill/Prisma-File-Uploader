@@ -53,13 +53,13 @@ model Folder {
   share         Share?
 }
 
-
 model Share {
-  id             Int      @id @default(autoincrement())
-  folder         Folder   @relation(fields: [folderId], references: [id], onDelete: Cascade)
-  folderId       Int      @unique
-  share_URL      String
+  id           Int      @id @default(autoincrement())
+  folder       Folder   @relation(fields: [folderId], references: [id], onDelete: Cascade)
+  folderId     Int      @unique
+  share_URL    String
   date_created DateTime @default(now())
-  lifespan  Int
+  lifespan     Int
 }
+
 // share lifespan represented in number of days
