@@ -5,6 +5,7 @@ const { updateFolderById } = require("../controllers/update.js");
 const { deleteFolderById } = require("../controllers/delete.js");
 const { v4: uuidv4 } = require('uuid');
 const folderRouter = Router();
+const { shareLinkGenerator } = require("../utils/utils.js");
 
 
 folderRouter.get("/create", (req, res) => {
@@ -138,11 +139,16 @@ folderRouter.post("/share/:id", async (req, res) => {
   const folderId = req.params.id;
   const { lifeSpan } = req.body;
   const code = uuidv4();
-  const link = `/folder/share/${folderId}?access_code=${code}`;
+  const link = `/folder/share/request/${folderId}?access_code=${code}`;
   // add code to db
 
   try {
-    const response = createShareLink(folderId, link, lifeSpan);
+    const response = await createShareLink(folderId, link, lifeSpan);
+    console.log("share link response: ", response);
+    const domain = req.get('host');
+    const url = shareLinkGenerator(domain, link);
+
+    res.send(`shareable link: ${url}`);
 
 
   } catch (error) {
@@ -154,15 +160,16 @@ folderRouter.post("/share/:id", async (req, res) => {
 
 });
 
-folderRouter.get("/share/:id", async (req, res) => {
+folderRouter.get("/share/request/:id", async (req, res) => {
   const folderId = req.params.id;
   const qparams = req.query;
 
+  console.log("the params sent:", qparams);
   // pull the code from db for the id, compare to make sure it is correct 
   // if its correct,continue
   // compare timestamp and make sure that its still valid
   // pull data for folderid and serve ejs with data
-})
+});
 
 
 

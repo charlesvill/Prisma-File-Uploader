@@ -78,7 +78,6 @@ async function createShareLink(folderId, shareUrl, lifeSpan) {
     },
   });
 
-  console.log("share link response: ", response);
 
   return response;
 }
