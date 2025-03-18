@@ -1,6 +1,6 @@
 const { Router } = require("express");
 const { createFolderByUser, createShareLink } = require("../controllers/create.js");
-const { readFolderById } = require("../controllers/read.js");
+const { readFolderById, readShareByCode } = require("../controllers/read.js");
 const { updateFolderById } = require("../controllers/update.js");
 const { deleteFolderById } = require("../controllers/delete.js");
 const { v4: uuidv4 } = require('uuid');
@@ -143,7 +143,7 @@ folderRouter.post("/share/:id", async (req, res) => {
   // add code to db
 
   try {
-    const response = await createShareLink(folderId, link, lifeSpan);
+    const response = await createShareLink(folderId, code, lifeSpan);
     console.log("share link response: ", response);
     const domain = req.get('host');
     const url = shareLinkGenerator(domain, link);
@@ -165,6 +165,29 @@ folderRouter.get("/share/request/:id", async (req, res) => {
   const qparams = req.query;
 
   console.log("the params sent:", qparams);
+  
+  try {
+    const response = await readShareByCode(folderId, qparams);
+    if(response.length === 0 || response === undefined){
+      res.status(404).render("error", {
+        errorMessage: "not found",
+      });
+
+    }
+    console.log("share table data: ", response);
+
+    
+    // compare time stamps and see if it still
+
+
+    // render page with the folder data
+    res.render("folder", {
+      folder: response.folder,
+    });
+  } catch (error) {
+    console.error(error);
+  }
+
   // pull the code from db for the id, compare to make sure it is correct 
   // if its correct,continue
   // compare timestamp and make sure that its still valid

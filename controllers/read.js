@@ -57,10 +57,28 @@ async function readFileById(fileId, userId) {
   return response;
 }
 
+async function readShareByCode(folderId, accessCode){
+  const response = await prisma.share.findUnique({
+    where: {
+      share_code: accessCode,
+    },
+    include: {
+      folder: {
+        where: {
+          id: folderId,
+        },
+      },
+    },
+  });
+
+  return response;
+}
+
 
 
 module.exports = {
   readAllFoldersByUser,
   readFolderById,
   readFileById,
+  readShareByCode,
 };
