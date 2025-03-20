@@ -58,16 +58,18 @@ async function readFileById(fileId, userId) {
 }
 
 async function readShareByCode(folderId, accessCode){
+  console.log("accessCode type of: ", typeof accessCode);
   const response = await prisma.share.findUnique({
     where: {
       share_code: accessCode,
+      folderId: parseInt(folderId),
     },
     include: {
       folder: {
-        where: {
-          id: folderId,
-        },
-      },
+        include: {
+          files: true,
+        }
+      } 
     },
   });
 

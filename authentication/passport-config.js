@@ -6,7 +6,12 @@ const bcrypt = require("bcryptjs");
 
 function init(passport, prisma) {
   passport.use(new LocalStrategy(async (username, password, done) => {
+
     try {
+      // this is is for debug purposes: 
+      const allUsers = await prisma.user.findMany({});
+      console.log("all users: ", allUsers);
+      // end of debug code
       const user = await prisma.user.findFirst({
         where: {
           username: username,

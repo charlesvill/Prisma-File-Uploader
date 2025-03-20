@@ -57,7 +57,7 @@ model Share {
   id           Int      @id @default(autoincrement())
   folder       Folder   @relation(fields: [folderId], references: [id], onDelete: Cascade)
   folderId     Int      
-  share_code    String
+  share_code    String @unique
   date_created DateTime @default(now())
   lifespan     Int
 }

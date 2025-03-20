@@ -135,6 +135,7 @@ folderRouter.get("/share/:id", async (req, res) => {
 folderRouter.post("/share/:id", async (req, res) => {
   // create link
 
+  console.log("greetings from the share generate method")
 
   const folderId = req.params.id;
   const { lifeSpan } = req.body;
@@ -153,6 +154,7 @@ folderRouter.post("/share/:id", async (req, res) => {
 
   } catch (error) {
 
+    console.error("there was an error with generating the link!", error);
   }
 
 
@@ -162,7 +164,7 @@ folderRouter.post("/share/:id", async (req, res) => {
 
 folderRouter.get("/share/request/:id", async (req, res) => {
   const folderId = req.params.id;
-  const qparams = req.query;
+  const qparams = req.query.access_code;
 
   console.log("the params sent:", qparams);
   
@@ -174,7 +176,7 @@ folderRouter.get("/share/request/:id", async (req, res) => {
       });
 
     }
-    console.log("share table data: ", response);
+    console.log("request to view shared folder response: ", response);
 
     
     // compare time stamps and see if it still

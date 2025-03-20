@@ -65,7 +65,7 @@ async function createFileByUser(
   return response;
 }
 
-async function createShareLink(folderId, shareUrl, lifeSpan) {
+async function createShareLink(folderId, shareCode, lifeSpan) {
   const response = await prisma.share.create({
     data: {
       folder: {
@@ -73,7 +73,7 @@ async function createShareLink(folderId, shareUrl, lifeSpan) {
           id: parseInt(folderId),
         },
       },
-      share_URL: shareUrl,
+      share_code: shareCode,
       lifespan: parseInt(lifeSpan),
     },
   });
