@@ -53,7 +53,6 @@ app.use((req, res, next) => {
   next();
 });
 
-//this line below is test code
 const uploadDir = path.join(__dirname, "uploads");
 
 app.use("/log-in", logInRouter);
@@ -63,15 +62,9 @@ app.use("/uploads", express.static(uploadDir));
 app.use("/folder", folderRouter);
 app.use("/file", fileRouter);
 
-
-// route for a folder you can create where you can read create update and deleete folders
-// folders should read the contents of the files and the folder should store the id of the file
-// should be able to read information about the file such as the file size, date created etc
-// should be able to add/delete files from these folders as well. 
-
 app.get("/", indexRouter);
 
-app.use((req, res, next) => {
+app.use((req, res) => {
   console.log("no route was found");
   res.status(404).send("404: not found!");
 });

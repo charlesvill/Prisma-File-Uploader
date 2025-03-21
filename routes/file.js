@@ -28,7 +28,6 @@ fileRouter.get("/:id", async (req, res) => {
   const file = { ...response, previewableExt };
 
   res.render("file", {
-
     file: file,
   });
 

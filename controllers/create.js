@@ -60,8 +60,6 @@ async function createFileByUser(
       throw new Error(error);
     });
 
-  // console.log("file creation response", response);
-  // console.log("folder contents: ", response.folder.files);
   return response;
 }
 

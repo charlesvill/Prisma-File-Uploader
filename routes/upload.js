@@ -6,8 +6,6 @@ const { uploadFromStream } = require("../cloud/cloudinary.js");
 const { createFileByUser } = require("../controllers/create.js");
 
 
-//under uploading via memory buffer instead of storage config above, all you will need is const storage = multer.memoryStorage(): t
-//the file obj will have  a buffer that contains the entire file to pass off somehow to cloudinary. 
 const storage = multer.memoryStorage();
 const upload = multer({ storage: storage });
 

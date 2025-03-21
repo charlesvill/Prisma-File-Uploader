@@ -1,5 +1,4 @@
 const { Router } = require("express");
-const passport = require("passport");
 const signUpRouter = Router();
 const { PrismaClient } = require('@prisma/client');
 const bcrypt = require("bcryptjs");
@@ -15,7 +14,6 @@ signUpRouter.post("/", async (req, res) => {
   const {
     username,
     firstname,
-    lastname,
     password,
     confirmpass
   } = req.body;
@@ -27,7 +25,6 @@ signUpRouter.post("/", async (req, res) => {
   }
 
   try {
-
     bcrypt.hash(password, 10, async (err, hashedPassword) => {
       if (err) {
         return next(err);
@@ -51,9 +48,6 @@ signUpRouter.post("/", async (req, res) => {
     return res.redirect("/sign-up");
 
   }
-  // try to use prisma to create the new user in a try catch block 
-  // throw error and try to transfer the error code if its a username that exists
-  // redirect to log in if it was successful
 });
 
 module.exports = signUpRouter;
