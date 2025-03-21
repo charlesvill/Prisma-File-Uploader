@@ -57,7 +57,7 @@ async function readFileById(fileId, userId) {
   return response;
 }
 
-async function readShareByCode(folderId, accessCode){
+async function readShareByCode(folderId, accessCode) {
   console.log("accessCode type of: ", typeof accessCode);
   const response = await prisma.share.findUnique({
     where: {
@@ -69,13 +69,22 @@ async function readShareByCode(folderId, accessCode){
         include: {
           files: true,
         }
-      } 
+      }
     },
   });
 
   return response;
 }
 
+async function isOwner(userId, folderId) {
+  const response = await readFolderById(userId, folderId);
+
+  if (response.length === 0 || response === undefined) {
+    return false;
+  }
+
+  return { isOwner: true, response };
+}
 
 
 module.exports = {
@@ -83,4 +92,5 @@ module.exports = {
   readFolderById,
   readFileById,
   readShareByCode,
+  isOwner,
 };
